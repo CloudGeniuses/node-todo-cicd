@@ -3,35 +3,39 @@ pipeline {
     
     stages {
         
-        stage("code"){
-            steps{
+        stage("code") {
+            steps {
                 git url: "https://github.com/CloudGeniuses/node-todo-cicd.git", branch: "master"
                 echo 'bhaiyya code clone ho gaya'
             }
         }
-        stage("build and test"){
-            steps{
+        
+        stage("build and test") {
+            steps {
                 sh "docker build -t cloudgeniuslab/node-todo-test ."
                 echo 'code build bhi ho gaya'
             }
         }
-        stage("scan image"){
-            steps{
+        
+        stage("scan image") {
+            steps {
                 echo 'image scanning ho gayi'
             }
         }
-        stage("push"){
-            steps{
-                withCredentials([usernamePassword(credentialsId:"dockerhub-cred",passwordVariable:"dockerhub-credPass",usernameVariable:"dockerhub-credUser")]){
-                sh "docker login -u ${env.dockerhub-cred-credUser} -p ${env.dockerhub-cred-credPass}"
-                sh "docker tag cloudgeniuslab/node-todo-test-job cloudgeniuslab/node-todo-test-job"
-                sh "docker push cloudgeniuslab/node-todo-test-job"
-                echo 'image push ho gaya'
+        
+        stage("push") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "dockerhub-cred", passwordVariable: "dockerhubCredPass", usernameVariable: "dockerhubCredUser")]) {
+                    sh "docker login -u ${dockerhubCredUser} -p ${dockerhubCredPass}"
+                    sh "docker tag cloudgeniuslab/node-todo-test cloudgeniuslab/node-todo-test-job"
+                    sh "docker push cloudgeniuslab/node-todo-test-job"
+                    echo 'image push ho gaya'
                 }
             }
         }
-        stage("deploy"){
-            steps{
+        
+        stage("deploy") {
+            steps {
                 sh "docker-compose down && docker-compose up -d"
                 echo 'deployment ho gayi'
             }
