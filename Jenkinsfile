@@ -22,10 +22,10 @@ pipeline {
         }
         stage("push"){
             steps{
-                withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerhubPass",usernameVariable:"dockerhubUser")]){
-                sh "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPass}"
-                sh "docker tag cloudgeniuslab/node-todo-test cloudgeniuslab/node-todo-test"
-                sh "docker push cloudgeniuslab/node-todo-test"
+                withCredentials([usernamePassword(credentialsId:"dockerhub-cred",passwordVariable:"dockerhub-credPass",usernameVariable:"dockerhub-credUser")]){
+                sh "docker login -u ${env.dockerhub-cred-credUser} -p ${env.dockerhub-cred-credPass}"
+                sh "docker tag cloudgeniuslab/node-todo-test-job cloudgeniuslab/node-todo-test-job"
+                sh "docker push cloudgeniuslab/node-todo-test-job"
                 echo 'image push ho gaya'
                 }
             }
