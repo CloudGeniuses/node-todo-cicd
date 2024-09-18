@@ -12,7 +12,7 @@ pipeline {
         
         stage("build and test") {
             steps {
-                sh "docker build -t cloudgeniuslab/node-todo-test ."
+                bat "docker build -t cloudgeniuslab/node-todo-test ."
                 echo 'code build bhi ho gaya'
             }
         }
@@ -26,9 +26,9 @@ pipeline {
         stage("push") {
             steps {
                 withCredentials([usernamePassword(credentialsId: "dockerhub-cred", passwordVariable: "dockerhubCredPass", usernameVariable: "dockerhubCredUser")]) {
-                    sh "docker login -u ${dockerhubCredUser} -p ${dockerhubCredPass}"
-                    sh "docker tag cloudgeniuslab/node-todo-test cloudgeniuslab/node-todo-test-job"
-                    sh "docker push cloudgeniuslab/node-todo-test-job"
+                    bat "docker login -u ${dockerhubCredUser} -p ${dockerhubCredPass}"
+                    bat "docker tag cloudgeniuslab/node-todo-test cloudgeniuslab/node-todo-test-job"
+                    bat "docker push cloudgeniuslab/node-todo-test-job"
                     echo 'image push ho gaya'
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
         
         stage("deploy") {
             steps {
-                sh "docker-compose down && docker-compose up -d"
+                bat "docker-compose down && docker-compose up -d"
                 echo 'deployment ho gayi'
             }
         }
