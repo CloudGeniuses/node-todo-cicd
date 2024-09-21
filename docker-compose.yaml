@@ -1,7 +1,5 @@
-version: '3.9'
-
 services:
   web:
-    image: "cloudgeniuslab/node-todo-test-job"
+    image: "cloudgeniuslab/node-todo-test-job:latest"
     ports:
       - "8000:8000"
